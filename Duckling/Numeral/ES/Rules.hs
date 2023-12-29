@@ -195,6 +195,16 @@ bigNumbersMap =
     , ("un millon", 1000000)
     , ("un millón", 1000000)
     , ("millones", 1000000)
+    , ("billon", 1000000000000)
+    , ("billón", 1000000000000)
+    , ("un billón", 1000000000000)
+    , ("un billon", 1000000000000)
+    , ("billones", 1000000000000)
+    , ("trillón", 1000000000000000000)
+    , ("trillon", 1000000000000000000)
+    , ("un trillón", 1000000000000000000)
+    , ("un trillon", 1000000000000000000)
+    , ("trillones", 1000000000000000000)
     -- Note: billion and larger is ambiguous becaouse of long vs short scale
     ]
 
@@ -203,7 +213,7 @@ ruleBigNumeral = Rule
   { name = "big number 100 to 1K"
   , pattern =
       [ regex
-          "(cien(to|tos)?|doscientos|trescientos|cuatrocientos|quinientos|seiscientos|setecientos|ochocientos|novecientos|(un )?mill(o|ó)n)"
+          "(cien(to|tos)?|doscientos|trescientos|cuatrocientos|quinientos|seiscientos|setecientos|ochocientos|novecientos|(un )?(tr|b|m)ill(o|ó)n)"
       ]
   , prod = \case
       (Token RegexMatch (GroupMatch (match : _)) : _) ->
@@ -217,6 +227,19 @@ ruleBigNumeralMultipliable = Rule
   , pattern =
       [ regex
           "(mil(lones)?)"
+      ]
+  , prod = \case
+      (Token RegexMatch (GroupMatch (match : _)) : _) ->
+        HashMap.lookup (Text.toLower match) bigNumbersMap >>= integer >>= withMultipliable
+      _ -> Nothing
+  }
+ 
+ruleBigNumeralMultipliable2 :: Rule
+ruleBigNumeralMultipliable2 = Rule
+  { name = "1K or 1M in multipliable form"
+  , pattern =
+      [ regex
+          "(billones|trillones)"
       ]
   , prod = \case
       (Token RegexMatch (GroupMatch (match : _)) : _) ->
@@ -254,7 +277,7 @@ ruleNumeralMultiply :: Rule
 ruleNumeralMultiply = Rule
   { name = "2..999 <multipliable>"
   , pattern =
-      [ Predicate $ numberBetween 2 1000
+      [ Predicate $ numberBetween 2 1001
       , Predicate isMultipliable
       ]
   , prod = \case
@@ -288,6 +311,8 @@ ruleNumeralMillionsAnd = Rule
        | 0 < v1 -> double $ v1 + v2
       _ -> Nothing
   }
+  
+
 
 ruleNumeralDotNumeral :: Rule
 ruleNumeralDotNumeral = Rule
@@ -344,6 +369,7 @@ rules =
   , ruleNumeralTwentyOneToNinetyNine
   , ruleBigNumeral
   , ruleBigNumeralMultipliable
+  , ruleBigNumeralMultipliable2
   , ruleNumeralMultiply
   , ruleNumeralThousandsAnd
   , ruleNumeralMillionsAnd
