@@ -104,6 +104,19 @@ sixteenToTwentyNineMap =
     , ("veintisiete", 27)
     , ("veintiocho", 28)
     , ("veintinueve", 29)
+    , ("ventiuno", 21)
+    , ("ventiuna", 21)
+    , ("ventidos", 22)
+    , ("ventidós", 22)
+    , ("ventitrés", 23)
+    , ("ventitres", 23)
+    , ("venticuatro", 24)
+    , ("venticinco", 25)
+    , ("ventiséis", 26)
+    , ("ventiseis", 26)
+    , ("ventisiete", 27)
+    , ("ventiocho", 28)
+    , ("ventinueve", 29)
     ]
 
 
@@ -112,7 +125,7 @@ ruleNumeralSixteenToTwentyNine = Rule
   { name = "number (16..19 21..29)"
   , pattern =
       [ regex
-          "(die(c|s)is(é|e)is|diecisiete|dieciocho|diecinueve|veintiun(o|a)|veintid(o|ó)s|veintitr(é|e)s|veinticuatro|veinticinco|veintis(é|e)is|veintisiete|veintiocho|veintinueve|treinta)"
+          "(die(c|s)is(é|e)is|diecisiete|dieciocho|diecinueve|ve(i)?ntiun(o|a)|ve(i)?ntid(o|ó)s|ve(i)?ntitr(é|e)s|ve(i)?nticuatro|ve(i)?nticinco|ve(i)?ntis(é|e)is|ve(i)?ntisiete|ve(i)?ntiocho|ve(i)?ntinueve|treinta)"
       ]
   , prod = \case
       (Token RegexMatch (GroupMatch (match : _)) : _) ->
@@ -277,7 +290,7 @@ ruleNumeralMultiply :: Rule
 ruleNumeralMultiply = Rule
   { name = "2..999 <multipliable>"
   , pattern =
-      [ Predicate $ numberBetween 2 1001
+      [ dimension Numeral
       , Predicate isMultipliable
       ]
   , prod = \case
@@ -285,6 +298,7 @@ ruleNumeralMultiply = Rule
         double $ v1 * v2
       _ -> Nothing
   }
+
 
 ruleNumeralThousandsAnd :: Rule
 ruleNumeralThousandsAnd = Rule
@@ -311,8 +325,6 @@ ruleNumeralMillionsAnd = Rule
        | 0 < v1 -> double $ v1 + v2
       _ -> Nothing
   }
-  
-
 
 ruleNumeralDotNumeral :: Rule
 ruleNumeralDotNumeral = Rule

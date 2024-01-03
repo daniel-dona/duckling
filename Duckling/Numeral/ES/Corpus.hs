@@ -31,7 +31,7 @@ allExamples =
         (NumeralValue 16)
         ["dieciséis", "dieciseis", "Diesiseis", "diez y seis"]
     , examples (NumeralValue 21) ["veintiuno", "veinte y uno"]
-    , examples (NumeralValue 22) ["veintidós"]
+    , examples (NumeralValue 22) ["veintidós", "ventidos", "veintidos"]
     , examples (NumeralValue 23) ["veintitrés", "veinte y tres"]
     , examples (NumeralValue 70) ["setenta"]
     , examples (NumeralValue 78) ["Setenta y ocho"]
@@ -70,5 +70,6 @@ allExamples =
     , examples (NumeralValue 203_000) ["doscientos tres mil", "203 mil"]
     , examples (NumeralValue 4_000_000) ["cuatro millones", "4 millones"]
     , examples (NumeralValue 4_002_003) ["cuatro millones dos mil tres", "4 millones 2 mil 3"]
+    , examples (NumeralValue 7_000_000_000) ["siete mil millones"]
     , examples (NumeralValue 7_000_000_000_000) ["siete billones"]
     ]
