@@ -27,6 +27,7 @@ import Duckling.Resolve
 data NumeralData = NumeralData
   { value        :: Double
   , grain        :: Maybe Int
+  , percent   :: Bool
   , multipliable :: Bool
   -- Hack until other use cases pop up,
   -- at which point we'll craft a generic solution.

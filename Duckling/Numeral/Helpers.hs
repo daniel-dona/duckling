@@ -29,6 +29,7 @@ module Duckling.Numeral.Helpers
   , parseInteger
   , withGrain
   , withMultipliable
+  , withPercent
   , parseDecimal
   ) where
 
@@ -136,6 +137,11 @@ withMultipliable :: Token -> Maybe Token
 withMultipliable (Token Numeral x@NumeralData{}) =
   Just $ Token Numeral $ x {multipliable = True}
 withMultipliable _ = Nothing
+
+withPercent :: Token -> Maybe Token
+withPercent (Token Numeral x@NumeralData{}) =
+  Just $ Token Numeral $ x {percent = True}
+withPercent _ = Nothing
 
 withGrain :: Int -> Token -> Maybe Token
 withGrain g (Token Numeral x@NumeralData{}) =

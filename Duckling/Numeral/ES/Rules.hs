@@ -336,6 +336,17 @@ ruleNumeralDotNumeral = Rule
       _ -> Nothing
   }
 
+rulePercent :: Rule
+rulePercent = Rule
+  { name = "<num> por cien"
+  , pattern = [dimension Numeral, regex "porciento|por cien(to)?|%"]
+  , prod = \case
+      (_:Token Numeral NumeralData{TNumeral.value = v}:_) ->
+        double $ v / 100 >>= withPercent
+      _ -> Nothing
+  }
+  
+  
 ruleLeadingDotNumeral :: Rule
 ruleLeadingDotNumeral = Rule
   { name = "dot number"
@@ -371,6 +382,7 @@ ruleNumeralsPrefixWithNegativeOrMinus = Rule
   }
 
 
+
 rules :: [Rule]
 rules =
   [ ruleNumeralZeroToFifteen
@@ -391,4 +403,5 @@ rules =
   , ruleLeadingDotNumeral
   , ruleNumeralsSuffixesKMG
   , ruleNumeralsPrefixWithNegativeOrMinus
+  , rulePercent
   ]
