@@ -157,6 +157,7 @@ double :: Double -> Maybe Token
 double x = Just $ Token Numeral $ NumeralData
   { value = x
   , grain = Nothing
+  , percent = False
   , multipliable = False
   , okForAnyTime = True
   }
