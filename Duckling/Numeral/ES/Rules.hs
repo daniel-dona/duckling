@@ -350,7 +350,7 @@ rulePercent = Rule
 ruleLeadingDotNumeral :: Rule
 ruleLeadingDotNumeral = Rule
   { name = "dot number"
-  , pattern = [regex "coma|punto|cero", Predicate $ numberBetween 0 99]
+  , pattern = [regex "coma|punto", Predicate $ numberBetween 0 99]
   , prod = \case
       (_:Token Numeral NumeralData{TNumeral.value = v}:_) ->
         double $ decimalsToDouble v
