@@ -342,7 +342,7 @@ rulePercent = Rule
   , pattern = [dimension Numeral, regex "por( )?cien(to)?"]
   , prod = \case
       (Token Numeral NumeralData{TNumeral.value = v} : _ : _) ->
-        double $ decimalsToDouble v
+        double $ (v / 100)
       _ -> Nothing
   }
   
