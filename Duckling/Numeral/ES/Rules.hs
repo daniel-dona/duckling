@@ -329,7 +329,7 @@ ruleNumeralMillionsAnd = Rule
 ruleNumeralDotNumeral :: Rule
 ruleNumeralDotNumeral = Rule
   { name = "number dot number"
-  , pattern = [dimension Numeral, regex "(co(n|ma)|punto)", Predicate $ not . hasGrain]
+  , pattern = [dimension Numeral, regex "(co(n|ma)|punto)", Predicate $ numberBetween 0 99]
   , prod = \case
       (Token Numeral NumeralData { TNumeral.value = v1 } : _ : Token Numeral NumeralData { TNumeral.value = v2 } : _) ->
         double $ v1 + decimalsToDouble v2
@@ -350,7 +350,7 @@ rulePercent = Rule
 ruleLeadingDotNumeral :: Rule
 ruleLeadingDotNumeral = Rule
   { name = "dot number"
-  , pattern = [regex "coma|punto", Predicate $ not . hasGrain]
+  , pattern = [regex "coma|punto|cero", Predicate $ not . hasGrain]
   , prod = \case
       (_:Token Numeral NumeralData{TNumeral.value = v}:_) ->
         double $ decimalsToDouble v
