@@ -41,9 +41,9 @@ ruleDozen = Rule
 zeroNineteenMap :: HashMap Text Integer
 zeroNineteenMap = HashMap.fromList
   [ ( "naught"   , 0 )
-  , ( "nil"      , 0 )
+--  , ( "nil"      , 0 )
   , ( "nought"   , 0 )
-  , ( "none"     , 0 )
+--  , ( "none"     , 0 )
   , ( "zero"     , 0 )
   , ( "zilch"    , 0 )
   , ( "one"      , 1 )

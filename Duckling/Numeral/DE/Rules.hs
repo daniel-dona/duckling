@@ -182,7 +182,8 @@ ruleZero :: Rule
 ruleZero = Rule
   { name = "integer 0"
   , pattern =
-    [ regex "(keine(m|n|r|s)?|keins?|null|nichts)"
+    --[ regex "(keine(m|n|r|s)?|keins?|null|nichts)"
+    [ regex "(null)"
     ]
   , prod = \_ -> integer 0
   }
