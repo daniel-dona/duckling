@@ -15,6 +15,7 @@ module Duckling.Numeral.Helpers
   , integer
   , multiply
   , isMultipliable
+  , isMultipliableBy
   , isNatural
   , isPositive
   , hasGrain
@@ -103,7 +104,7 @@ numberWith f pred = Predicate $ \x ->
     _ -> False
 
 numberBetween :: Double -> Double -> Predicate
-numberBetween low up (Token Numeral NumeralData {value = v, multipliable = False}) =
+numberBetween low up (Token Numeral NumeralData {value = v}) =
   low <= v && v < up
 numberBetween _ _ _ = False
 
@@ -119,6 +120,10 @@ isPositive _ = False
 isMultipliable :: Predicate
 isMultipliable (Token Numeral nd) = multipliable nd
 isMultipliable _ = False
+
+isMultipliableBy :: Double -> Predicate
+isMultipliableBy num (Token Numeral NumeralData {value = v, multipliable = m}) = m == True && v == num
+isMultipliableBy _ _ = False
 
 hasGrain :: Predicate
 hasGrain (Token Numeral NumeralData {grain = Just g}) = g > 1

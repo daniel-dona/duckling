@@ -236,10 +236,25 @@ ruleBigNumeral = Rule
 
 ruleBigNumeralMultipliable :: Rule
 ruleBigNumeralMultipliable = Rule
-  { name = "1K or 1M in multipliable form"
+  { name = "1K in multipliable form"
   , pattern =
-      [ regex
-          "(mil(lones)?)"
+      [
+      regex
+          "(mil)"
+      ]
+  , prod = \case
+      (Token RegexMatch (GroupMatch (match : _)) : _) ->
+        HashMap.lookup (Text.toLower match) bigNumbersMap >>= integer >>= withMultipliable
+      _ -> Nothing
+  }
+  
+ruleBigNumeralMultipliable2 :: Rule
+ruleBigNumeralMultipliable2 = Rule
+  { name = "1M in multipliable form"
+  , pattern =
+      [ 
+      regex
+          "(millones)"
       ]
   , prod = \case
       (Token RegexMatch (GroupMatch (match : _)) : _) ->
@@ -247,12 +262,27 @@ ruleBigNumeralMultipliable = Rule
       _ -> Nothing
   }
  
-ruleBigNumeralMultipliable2 :: Rule
-ruleBigNumeralMultipliable2 = Rule
-  { name = "1K or 1M in multipliable form"
+ruleBigNumeralMultipliable3 :: Rule
+ruleBigNumeralMultipliable3 = Rule
+  { name = "1B in multipliable form"
   , pattern =
-      [ regex
-          "(billones|trillones)"
+      [ 
+      regex
+          "(billones)"
+      ]
+  , prod = \case
+      (Token RegexMatch (GroupMatch (match : _)) : _) ->
+        HashMap.lookup (Text.toLower match) bigNumbersMap >>= integer >>= withMultipliable
+      _ -> Nothing
+  }
+
+ruleBigNumeralMultipliable4 :: Rule
+ruleBigNumeralMultipliable4 = Rule
+  { name = "1T in multipliable form"
+  , pattern =
+      [ 
+      regex
+          "(trillones)"
       ]
   , prod = \case
       (Token RegexMatch (GroupMatch (match : _)) : _) ->
@@ -288,10 +318,50 @@ ruleNumeralHundredsAndSmaller = Rule
 
 ruleNumeralMultiply :: Rule
 ruleNumeralMultiply = Rule
-  { name = "2..999 <multipliable>"
+  { name = "2..999 <multipliable 1K>"
   , pattern =
-      [ dimension Numeral
-      , Predicate isMultipliable
+      [ Predicate $ numberBetween 0 999
+      , Predicate $ isMultipliableBy 1000
+      ]
+  , prod = \case
+      (Token Numeral NumeralData { TNumeral.value = v1 } : Token Numeral NumeralData { TNumeral.value = v2 } : _) ->
+        double $ v1 * v2
+      _ -> Nothing
+  }
+
+ruleNumeralMultiply2 :: Rule
+ruleNumeralMultiply2 = Rule
+  { name = "2..999 <multipliable 1M>"
+  , pattern =
+      [ Predicate $ numberBetween 0 999999
+      , Predicate $ isMultipliableBy 1000000
+      ]
+  , prod = \case
+      (Token Numeral NumeralData { TNumeral.value = v1 } : Token Numeral NumeralData { TNumeral.value = v2 } : _) ->
+        double $ v1 * v2
+      _ -> Nothing
+  }
+
+ruleNumeralMultiply3 :: Rule
+ruleNumeralMultiply3 = Rule
+  { name = "2..999 <multipliable 1B>"
+  , pattern =
+      [ Predicate $ numberBetween 0 999999999999
+      , Predicate $ isMultipliableBy 1000000000000
+      ]
+  , prod = \case
+      (Token Numeral NumeralData { TNumeral.value = v1 } : Token Numeral NumeralData { TNumeral.value = v2 } : _) ->
+        double $ v1 * v2
+      _ -> Nothing
+  }
+
+
+ruleNumeralMultiply4 :: Rule
+ruleNumeralMultiply4 = Rule
+  { name = "2..999 <multipliable 1T>"
+  , pattern =
+      [ Predicate $ numberBetween 0 999999999999999999
+      , Predicate $ isMultipliableBy 1000000000000000000
       ]
   , prod = \case
       (Token Numeral NumeralData { TNumeral.value = v1 } : Token Numeral NumeralData { TNumeral.value = v2 } : _) ->
@@ -394,7 +464,12 @@ rules =
   , ruleBigNumeral
   , ruleBigNumeralMultipliable
   , ruleBigNumeralMultipliable2
+  , ruleBigNumeralMultipliable3
+  , ruleBigNumeralMultipliable4
   , ruleNumeralMultiply
+  , ruleNumeralMultiply2
+  , ruleNumeralMultiply3
+  , ruleNumeralMultiply4
   , ruleNumeralThousandsAnd
   , ruleNumeralMillionsAnd
   , ruleTwoPartHundreds
